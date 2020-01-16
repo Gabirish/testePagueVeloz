@@ -1,0 +1,94 @@
+﻿
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h2>Olá!</h2>
+
+<div>
+    <h3>Você está visualizando meu teste pratico!</h3>
+    <br />
+    <span>
+        infelizmente devido ao tempo disponivel, não consegui fazer tudo que gostaria, e ficou pendente alguns trechos ainda. <br />
+        Algumas partes feitas ainda não ficaram com o esmero que gostaria.  <br />
+        De toda forma, agradecço a oportunidade, e ficaria ainda mais agradecido com uma oportuniidade.
+        </p>
+       <span style="font-weight: bold;"> Deixo aqui meu @Html.ActionLink("CURRICULO", "Curriculo", "Home") para visualizarem.</span>
+        </p>
+        Se possivel, ficaria grato com um feedback sobre o teste!
+        <br />
+        Alias... depois que der uma olhadinha no código, é só vir <a href="#" onclick="enviarEmail()">AQUI</a> para mandar o e-mail de contato.
+        </p>
+        A DLL do e-mail está na pasta do projet.
+    </span>
+</div>
+
+<div style="display:none">
+    <div id="dialog-confirm" title="Enviar email...">
+        <div class="col-md-12 form-group">
+            <input id="nome" class="form-control" placeholder="Digite o seu nome..." />
+        </div>
+        <div class="col-md-12 form-group">
+            <textarea class="form-control" id="emailMensagem" placeholder="Digite aqui sua mensagem..."></textarea>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts {
+
+    <link rel="stylesheet" href="~/lib/jqueryUi/jquery-ui.min.css" />
+    <link rel="stylesheet" href="~/lib/jqueryUi/jquery-ui.theme.min.css" />
+    <script type="text/javascript" src="~/lib/jqueryUi/jquery-ui.min.js"></script>
+
+    <script>
+        function enviarEmail() {
+            $("#dialog-confirm").dialog({
+                resizable: false,
+                height: "auto",
+                width: 600,
+                modal: true,
+                buttons: {
+                    "Enviar": function () {
+
+
+                        var nome = $("#nome").val();
+                        var mensagem = $("#emailMensagem").val();
+
+                        if (!mensagem) {
+                            return (alert("Nem uma menssagenzinha que seja??"));
+                        } else if (mensagem.length < 20) {
+                            return (alert("Vamos lá.. me fale mais..."));
+                        }
+
+
+                        var dados = {
+                            Nome: nome,
+                            Menssagem: mensagem
+                        }
+
+                        console.log(dados);
+
+                        $.ajax({
+                            url: '/Home/EnviarEmail',
+                            type: 'POST',
+                            data: dados,
+                            success: () => {
+                                $(this).dialog("close");
+                                alert("email enviado com sucesso")
+                            }, error: () => {
+                                $(this).dialog("close");
+                                alert("uhm... desculpe, não foi possivel fazer o envio")
+                            }
+                        });
+
+                    },
+                    Cancel: function () {
+                        $(this).dialog("close");
+                    }
+                }
+            })
+
+        }
+    </script>
+}

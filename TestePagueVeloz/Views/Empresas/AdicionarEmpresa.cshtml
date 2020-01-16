@@ -1,0 +1,49 @@
+﻿@model TestePagueVeloz.ViewModel.EmpresaViewModel
+
+@{
+    ViewData["Title"] = "Adicionar Empresa";
+}
+
+<h2>Adicionar Empresa</h2>
+
+
+@if( ViewBag.Error != null)
+{
+    <h4> @ViewBag.Error</h4>
+}
+
+<hr />
+<div class="row">
+    <form method="post" action="AdicionarEmpresa">
+        <div class="row form-group col-md-12">
+            <label class="col-md-2" asp-for="UF"></label>
+            <div class="col-md-1">
+                <select class="form-control " asp-for="UF" asp-items="Html.GetEnumSelectList(typeof (UF))"></select>
+            </div>
+        </div>
+        <div class="row form-group col-md-12">
+            <label class="col-md-2" asp-for="CNPJ"></label>
+            <div class="col-md-5">
+                <input class="form-control cpfOuCnpj" asp-for="CNPJ" />
+            </div>
+        </div>
+        <div class="row form-group col-md-12">
+            <label class="col-md-2" asp-for="NomeFantasia"></label>
+            <div class="col-md-5">
+                <input class="form-control " asp-for="NomeFantasia" />
+            </div>
+        </div>
+        <div class="row form-group col-md-12">
+            <div class="col-md-2"></div>
+            <div class="col-lg-5">
+                <button class="btn btn-primary" type="submit">Enviar</button>
+                <a class="btn btn-warning" asp-action="Listar">Voltar Para Listagem</a>
+            </div>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    <script type="text/javascript" src="~/lib/mascara/mascara.js"></script>
+    <script type="text/javascript" src="~/js/novaEmpresa.js"></script>
+}

@@ -1,0 +1,84 @@
+﻿@model TestePagueVeloz.ViewModel.FornecedorViewModel
+
+@{
+    ViewData["Title"] = "NovoFornecedor";
+}
+
+<h2>Novo Fornecedor</h2>
+
+<hr />
+
+@if (ViewBag.Error != null)
+{
+    <h1>@ViewBag.Error</h1>
+}
+
+<div class="row">
+    <form method="post" action="NovoFornecedor">
+        <div class="row col-md-12 form-group">
+            <label class="col-md-2" asp-for="Nome"></label>
+
+            <div class="col-md-5">
+                <input class="form-control " asp-for="Nome" />
+            </div>
+        </div>
+        <div class="row col-md-12 form-group">
+            <label class="col-md-2" asp-for="CnpjOuCPpf"></label>
+            <div class="col-md-5">
+                <input class="cpfOuCnpj form-control" asp-for="CnpjOuCPpf" />
+            </div>
+        </div>
+        <div class="row col-md-12 form-group campoPessoaFisica">
+            <label class="col-md-2" asp-for="DataDeNascimento"></label>
+            <div class="col-md-5">
+                <input type="date" asp-for="DataDeNascimento" class="form-control " id="last-start-date" value="@string.Format("{0:dd/MM/yyyy}", DateTime.Now)" />
+            </div>
+        </div>
+        <div class="row col-md-12 form-group">
+            <label class="col-md-2" asp-for="EmpresaId"></label>
+            <div class="col-md-5">
+                <select id="empresaDropDown" class="form-control " onchange="">
+                    <option>Selecione...</option>
+                    @{
+
+                        foreach (Empresa empresa in ViewBag.Empresas)
+                        {
+                            <option value="@empresa.EmpresaId">@empresa.NomeFantasia</option>
+                        }
+
+                    }
+                </select>
+                <span style="display:none"><input id="empresaIdTextArea" class="form-control " asp-for="EmpresaId" /> </span>
+            </div>
+        </div>
+        <div class="row col-md-12 form-group campoPessoaFisica">
+            <label class="col-md-2" asp-for="Rg"></label>
+            <div class="col-md-5">
+                <input class="form-control " asp-for="Rg" />
+            </div>
+        </div>
+        <div class="row col-md-12 form-group">
+            <label class="col-md-2" asp-for="Telefone"></label>
+            <div class="col-md-5">
+                <input id="telefone" class="form-control " asp-for="Telefone" />
+            </div>
+        </div>
+        <div class="row form-group col-md-12">
+            <div class="col-md-2"></div>
+            <div class="col-lg-5">
+                <button class="btn btn-primary" type="submit">Enviar</button>
+                <a class="btn btn-warning" asp-action="Listar">Voltar Para Listagem</a>
+            </div>
+        </div>
+    </form>
+</div>
+
+
+
+
+@section Scripts {
+    <script type="text/javascript" src="~/lib/mascara/mascara.js"></script>
+    <script type="text/javascript" src="~/js/novoFornecedor.js"></script>
+}
+
+

@@ -1,0 +1,50 @@
+﻿@model List<TestePagueVeloz.Models.Empresa>
+
+@{
+    ViewData["Title"] = "Listar";
+}
+
+<h2>Empresas</h2>
+
+
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>CNPJ</th>
+            <th>Fornecedor</th>
+            <th>Estado</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var empresa in Model)
+        {
+            <tr>
+                <td>@empresa.Cnpj</td>
+                <td>@empresa.NomeFantasia</td>
+                <td>@empresa.Uf</td>
+                <td>
+                    @Html.ActionLink("Editar", "Editar", "Empresas", new { empresaId = empresa.EmpresaId }, new { @class = "btn btn-primary" })
+                    <button class="btn btn-danger" onclick="deletar('/Empresas/Deletar?empresaId='+ @empresa.EmpresaId)">X</button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<div style="width:100%; text-align:right;">
+    @Html.ActionLink("Cadastrar Empresa", "AdicionarEmpresa", "Empresas", null, new { @class = "btn btn-primary" })
+</div>
+
+<div style="display:none">
+    <div id="dialog-confirm" title="Deletar Empresa?">
+        <p><span class="ui-icon ui-icon-alert" style="float:left; margin:12px 12px 20px 0;"></span>A empresa será deletado permanentemente. Você tem certeza?</p>
+    </div>
+</div>
+
+@section Scripts {
+    <link rel="stylesheet" href="~/lib/jqueryUi/jquery-ui.min.css" />
+    <link rel="stylesheet" href="~/lib/jqueryUi/jquery-ui.theme.min.css" />
+    <script type="text/javascript" src="~/lib/jqueryUi/jquery-ui.min.js"></script>
+    <script type="text/javascript" src="~/js/Deletar.js"></script>
+}

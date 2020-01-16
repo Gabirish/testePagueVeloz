@@ -1,0 +1,53 @@
+﻿@model List<TestePagueVeloz.Models.Fornecedor>
+
+@{
+    ViewData["Title"] = "Listar";
+}
+
+<h2>Fornecedores</h2>
+
+
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>CPF  / CNPJ</th>
+            <th>Fornecedor</th>
+            <th>Empresa</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var fornecedor in Model)
+        {
+            <tr>
+                <td>@fornecedor.CnpjOuCpf</td>
+                <td>@fornecedor.Nome</td>
+                <td>@(fornecedor.Empresa != null ? fornecedor.Empresa.NomeFantasia : "") </td>
+                <td>
+                    @Html.ActionLink("Editar", "Editar", "Fornecedores", new { fornecedorId = fornecedor.FornecedorId }, new { @class = "btn btn-primary" })
+                    <button class="btn btn-danger" onclick="deletar('/Fornecedores/Deletar?fornecedorId='+ @fornecedor.FornecedorId)">X</button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<div style="width:100%; text-align:right;">
+    @Html.ActionLink("Cadastrar Fornecedor", "NovoFornecedor", "Fornecedores", null, new { @class = "btn btn-primary" })
+</div>
+
+<div style="display:none">
+    <div id="dialog-confirm" title="Deletar Fornecedor?">
+        <p><span class="ui-icon ui-icon-alert" style="float:left; margin:12px 12px 20px 0;"></span>O fornecedor será deletado permanentemente. Você tem certeza?</p>
+    </div>
+</div>
+
+
+@section Scripts {
+    <link rel="stylesheet" href="~/lib/jqueryUi/jquery-ui.min.css" />
+    <link rel="stylesheet" href="~/lib/jqueryUi/jquery-ui.theme.min.css" />
+    <script type="text/javascript" src="~/lib/jqueryUi/jquery-ui.min.js"></script>
+    <script type="text/javascript" src="~/js/Deletar.js"></script>
+}
+
