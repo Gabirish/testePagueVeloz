@@ -114,7 +114,7 @@ namespace TestePagueVeloz.Models
             if ( empresa!= null && empresa.Uf == UF.PR)
             {
                 var hoje = DateTime.Now;
-                if (hoje < DataDeNascimento.AddYears(17))
+                if (hoje < dataDeNascimento.AddYears(18))
                 {
                     throw new ArgumentOutOfRangeException("Para o estado do Paraná, o fornecedor não pode ter menos de 18 anos");
                 }

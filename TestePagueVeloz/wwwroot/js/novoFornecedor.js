@@ -27,7 +27,7 @@ function iniciar() {
     $('#telefone').mask('(00) 00000-0000')
 
     $('#empresaDropDown').on("change", function () {
-        alert('mudou'); $('#empresaIdTextArea').val($('#empresaDropDown').val());
+        $('#empresaIdTextArea').val($('#empresaDropDown').val());
     })
 
     if ($('.cpfOuCnpj').val().length == 14) {

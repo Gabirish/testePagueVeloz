@@ -23,7 +23,18 @@ namespace TestePagueVeloz.Controllers
         {
             var fornecedores = contexto.Fornecedores.Include(e => e.Empresa).ToList();
 
+            var empresas = contexto.Empresas.ToList();
+
+            ViewBag.Empresas = empresas;
             return View(fornecedores);
+        }
+
+        [HttpGet("/BuscarFornecedor/{idFornecedor}")]
+        public Fornecedor BuscarFornecedor(int idFornecedor)
+        {
+            var fornecedor = contexto.Fornecedores.Include(e => e.Empresa).Where(f => f.FornecedorId == idFornecedor).SingleOrDefault();
+
+            return fornecedor;
         }
 
         public IActionResult NovoFornecedor()
@@ -31,6 +42,55 @@ namespace TestePagueVeloz.Controllers
 
             ViewBag.Empresas = contexto.Empresas.ToList();
             return View();
+        }
+
+        [HttpPost("/AtualizarFornecedor")]
+        public bool AtualizarFornecedor(Fornecedor pFornecedor)
+        {
+            try
+            {
+                var fornecedor = contexto.Fornecedores.Where(f => f.FornecedorId == pFornecedor.FornecedorId).SingleOrDefault();
+                if (!string.IsNullOrEmpty(pFornecedor.CnpjOuCpf) && pFornecedor.CnpjOuCpf != fornecedor.CnpjOuCpf)
+                {
+                    fornecedor.CnpjOuCpf = pFornecedor.CnpjOuCpf;
+                }
+                if (DateTime.MinValue != pFornecedor.DataDeNascimento && pFornecedor.DataDeNascimento != fornecedor.DataDeNascimento)
+                {
+                    fornecedor.DataDeNascimento = pFornecedor.DataDeNascimento;
+                }
+                if (pFornecedor.EmpresaId != 0 && pFornecedor.EmpresaId != fornecedor.EmpresaId)
+                {
+                    var empresa = contexto.Empresas.Where(e=> e.EmpresaId == pFornecedor.EmpresaId).SingleOrDefault();
+                    var hoje = DateTime.Now;
+                    if (empresa.Uf == UF.PR && hoje < pFornecedor.DataDeNascimento.AddYears(18))
+                    {
+                        return false;
+                    }
+                    
+                    fornecedor.EmpresaId = pFornecedor.EmpresaId;
+                }
+                if (!string.IsNullOrEmpty(pFornecedor.Nome) && pFornecedor.Nome != fornecedor.Nome)
+                {
+                    fornecedor.Nome = pFornecedor.Nome;
+                }
+                if (!string.IsNullOrEmpty(pFornecedor.Rg) && pFornecedor.Rg != fornecedor.Rg)
+                {
+                    fornecedor.Rg = pFornecedor.Rg;
+                }
+                if (!string.IsNullOrEmpty(pFornecedor.Telefone) && pFornecedor.Telefone != fornecedor.Telefone)
+                {
+                    fornecedor.Telefone = pFornecedor.Telefone;
+                }
+
+                contexto.Fornecedores.Update(fornecedor);
+                contexto.SaveChanges();
+
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
         }
 
         [HttpPost]
@@ -41,7 +101,7 @@ namespace TestePagueVeloz.Controllers
                 var novoFornecedor = new Fornecedor();
 
                 var empresa = contexto.Empresas.Where(e => e.EmpresaId == fornecedor.EmpresaId).SingleOrDefault();
-                if (string.IsNullOrEmpty(fornecedor.Rg))
+                if (fornecedor.CnpjOuCPpf.Length == 18)
                 {
 
                     novoFornecedor = new Fornecedor(
@@ -53,7 +113,7 @@ namespace TestePagueVeloz.Controllers
                                                 );
 
                 }
-                else
+                else if (fornecedor.CnpjOuCPpf.Length == 14)
                 {
                     novoFornecedor = new Fornecedor(
                                         fornecedor.Nome,
@@ -82,7 +142,7 @@ namespace TestePagueVeloz.Controllers
 
         public IActionResult Deletar(int fornecedorId)
         {
-           var fornecedor =  contexto.Fornecedores.Where(f => f.FornecedorId == fornecedorId).SingleOrDefault();
+            var fornecedor = contexto.Fornecedores.Where(f => f.FornecedorId == fornecedorId).SingleOrDefault();
             contexto.Fornecedores.Remove(fornecedor);
             contexto.SaveChanges();
             return RedirectToAction("Listar");
